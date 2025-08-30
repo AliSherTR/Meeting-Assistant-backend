@@ -13,6 +13,8 @@ const EnvSchema = z.object({
   EMAIL_PASS: z.string().min(8).max(100),
   EMAIL_FROM: z.string(),
   APP_URL: z.string().url(),
+  JWT_SECRET: z.string().min(8).max(100),
+  JWT_EXPIRES_IN: z.string().default("1d"),
 });
 
 const parsed = EnvSchema.safeParse(process.env);
@@ -21,7 +23,25 @@ if (!parsed.success) {
   process.exit(1);
 }
 
-export const config = {
+export type AppConfig = {
+  env: "development" | "production" | "test";
+  isDev: boolean;
+  isProd: boolean;
+  port: number;
+  logLevel: "fatal" | "error" | "warn" | "info" | "debug" | "trace";
+  mongoUri: string;
+  mongoPassword: string;
+  emailHost: string;
+  emailPort: number;
+  emailUser: string;
+  emailPass: string;
+  emailFrom: string;
+  appUrl: string;
+  jwtSecret: string; // plain string
+  jwtExpiresIn: number | string | undefined; // string like "1d" or a number
+};
+
+export const config: AppConfig = {
   env: parsed.data.NODE_ENV,
   isDev: parsed.data.NODE_ENV === "development",
   isProd: parsed.data.NODE_ENV === "production",
@@ -35,4 +55,6 @@ export const config = {
   emailPass: parsed.data.EMAIL_PASS,
   emailFrom: parsed.data.EMAIL_FROM,
   appUrl: parsed.data.APP_URL,
+  jwtSecret: parsed.data.JWT_SECRET,
+  jwtExpiresIn: parsed.data.JWT_EXPIRES_IN,
 } as const;

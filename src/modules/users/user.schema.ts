@@ -13,6 +13,16 @@ export const CreateUserSchema = z.object({
     .optional(),
 });
 
+export const LoginUserInput = z.object({
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  password: z.string({
+    required_error: "Password is required",
+    invalid_type_error: "Password must be a string",
+  }),
+});
+
 export const UpdateUserSchema = z.object({
   username: z.string().min(3).max(30).optional(),
   email: z.string().email().optional(),
@@ -25,4 +35,5 @@ export const UpdateUserSchema = z.object({
 });
 
 export type CreateUserInput = z.infer<typeof CreateUserSchema>;
+export type LoginUserInput = z.infer<typeof LoginUserInput>;
 export type UpdateUserInput = z.infer<typeof UpdateUserSchema>;
