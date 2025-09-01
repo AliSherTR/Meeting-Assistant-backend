@@ -1,12 +1,12 @@
-import { AnyZodObject, ZodError } from "zod";
+import { AnyZodObject, ZodEffects, ZodError } from "zod";
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../utils/appError";
 
-type Parts = {
-  body?: AnyZodObject;
-  params?: AnyZodObject;
-  query?: AnyZodObject;
-};
+interface Parts {
+  body?: AnyZodObject | ZodEffects<any>; // Add ZodEffects support
+  params?: AnyZodObject | ZodEffects<any>;
+  query?: AnyZodObject | ZodEffects<any>;
+}
 
 export const validate = (schema: Parts) => (req: Request, _res: Response, next: NextFunction) => {
   try {

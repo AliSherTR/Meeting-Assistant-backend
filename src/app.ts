@@ -5,6 +5,7 @@ import { requestLogger } from "./middleware/requestLogger";
 import { notFoundHandler } from "./middleware/notFound";
 import { globalErrorHandler } from "./middleware/errorHandler";
 import routes from "./routes";
+import "./events/email/email-handler";
 
 const app = express();
 

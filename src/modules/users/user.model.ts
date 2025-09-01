@@ -9,6 +9,12 @@ export interface IUser extends Document {
   password: string;
   role: UserRole;
   phone?: string;
+  accountActivationToken: string | null;
+  accountActivationExpiry: Date | null;
+  resetPasswordExpiry: Date | null;
+  resetPasswordToken: string | null;
+  resetPasswordAttempts: number;
+  emailRetryAttempts: number;
   isAccountActivated: boolean;
   comparePassword(candidate: string): Promise<boolean>;
 }
@@ -36,10 +42,36 @@ const userSchema = new Schema<IUser>(
       minlength: 8,
       select: false,
     },
+    accountActivationToken: {
+      type: String,
+      default: "",
+      unique: true,
+    },
+    accountActivationExpiry: {
+      type: Date,
+      default: null,
+    },
+    resetPasswordExpiry: {
+      type: Date,
+      default: null,
+    },
     role: {
       type: String,
       enum: ["employee", "employer"],
       required: true,
+    },
+    emailRetryAttempts: {
+      type: Number,
+      default: 0,
+    },
+    resetPasswordToken: {
+      type: String,
+      default: null,
+      unique: true,
+    },
+    resetPasswordAttempts: {
+      type: Number,
+      default: 0,
     },
     isAccountActivated: {
       type: Boolean,
