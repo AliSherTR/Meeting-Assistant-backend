@@ -30,9 +30,16 @@ export default {
       throw new AppError("Invalid user data", 400);
     }
     const token = await userService.loginUser(parsed.data);
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // HTTPS in production
+      sameSite: "strict", // or 'lax' depending on your needs
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours (adjust as needed)
+      path: "/",
+    });
     res.status(200).json({
       message: "Login successful",
-      data: { token },
+      data: null,
     });
   }),
 
@@ -41,6 +48,7 @@ export default {
     if (!parsed.success) {
       throw new AppError("Invalid user data", 400);
     }
+    console.log("I actually Ran");
 
     const response = await userService.activateAccount(parsed.data);
 

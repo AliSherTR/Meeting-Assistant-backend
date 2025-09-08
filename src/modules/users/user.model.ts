@@ -45,7 +45,6 @@ const userSchema = new Schema<IUser>(
     accountActivationToken: {
       type: String,
       default: "",
-      unique: true,
     },
     accountActivationExpiry: {
       type: Date,
@@ -67,7 +66,6 @@ const userSchema = new Schema<IUser>(
     resetPasswordToken: {
       type: String,
       default: null,
-      unique: true,
     },
     resetPasswordAttempts: {
       type: Number,

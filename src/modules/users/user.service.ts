@@ -61,14 +61,14 @@ async function activateAccount(data: ActivateUserInput) {
     "+email +isAccountActivated",
   );
   if (!user) {
-    throw new AppError("Invalid request", 400);
+    throw new AppError("Your account is already activated", 400);
   }
 
   if (user?.isAccountActivated === true) {
-    throw new AppError("Account already activated", 400);
+    throw new AppError("Your Account is already activated", 400);
   }
   if (!user.accountActivationExpiry || user.accountActivationExpiry < new Date()) {
-    throw new AppError("Email is expired.", 400);
+    throw new AppError("This account activation email has expired.", 400);
   }
 
   user.isAccountActivated = !user?.isAccountActivated;
@@ -92,7 +92,7 @@ async function resendActivationToken(input: ResendtActivationTokenInput) {
 
   if (!user) {
     return {
-      message: "Please check your email",
+      message: "If your email address is registered, you will receive a link to activate account",
     };
   }
 
@@ -114,7 +114,10 @@ async function resendActivationToken(input: ResendtActivationTokenInput) {
   if (hasUnexpired) {
     const msLeft = +user.accountActivationExpiry! - +now;
     const minutesLeft = Math.ceil(msLeft / 60000);
-    throw new AppError(`Existing token not expired. Try again in ~${minutesLeft} minutes.`, 400);
+    throw new AppError(
+      `If your email address is registered, you will receive a link to activate account`,
+      400,
+    );
   }
 
   const { token, hashed, expiry } = newActivationToken();
@@ -132,7 +135,9 @@ async function resendActivationToken(input: ResendtActivationTokenInput) {
     registeredAt: new Date(),
   });
 
-  return { message: "A new activation email has been sent." };
+  return {
+    message: "If your email address is registered, you will receive a link to activate account",
+  };
 }
 
 async function loginUser(input: LoginUserInput) {
