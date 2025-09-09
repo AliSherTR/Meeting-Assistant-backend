@@ -172,7 +172,7 @@ async function resetPasswordRequest(input: ResetPasswordRequestInput) {
 
   if (!user) {
     return {
-      message: "Password Reset Email Sent Successfully",
+      message: "If this email is registered you will receive an email to reset your password",
     };
   }
 
@@ -193,7 +193,7 @@ async function resetPasswordRequest(input: ResetPasswordRequestInput) {
   });
 
   return {
-    message: "Please check your email for instructions to reset your password",
+    message: "If this email is registered you will receive an email to reset your password",
   };
 }
 
